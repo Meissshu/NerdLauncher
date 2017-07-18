@@ -1,6 +1,7 @@
 package com.meishu.android.nerdlauncher.fragments;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -65,7 +66,7 @@ public class NerdLauncherFragment extends Fragment {
         return v;
     }
 
-    private class ActivityHolder extends RecyclerView.ViewHolder {
+    private class ActivityHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ResolveInfo resolveInfo;
         private TextView nameTextView;
@@ -79,6 +80,15 @@ public class NerdLauncherFragment extends Fragment {
             this.resolveInfo = resolveInfo;
             String name = resolveInfo.loadLabel(getActivity().getPackageManager()).toString();
             nameTextView.setText(name);
+            nameTextView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            ActivityInfo activityInfo = resolveInfo.activityInfo;
+            Intent intent = new Intent(Intent.ACTION_MAIN)
+                    .setClassName(activityInfo.packageName, activityInfo.name);
+            startActivity(intent);
         }
     }
 
